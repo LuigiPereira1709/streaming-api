@@ -1,8 +1,6 @@
 HELP.md
-.env
-**.mp3
-**.jpeg
 deploy.log
+.env
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
