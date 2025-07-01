@@ -50,7 +50,7 @@ public class ControllerExceptionsTest {
 
     @GetMapping("/internalException")
     public void throwInternalException() {
-        throw new InternalException("Test internal exception", TestController.class, SeverityLevel.CRITICAL);
+        throw new InternalException("Test internal exception", ControllerExceptionsTest.class, SeverityLevel.CRITICAL);
     }
 
     @PostMapping("/webExchangeBindException")

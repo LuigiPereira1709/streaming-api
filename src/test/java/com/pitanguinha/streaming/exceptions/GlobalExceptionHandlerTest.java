@@ -7,7 +7,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.http.MediaType;
 
-@WebFluxTest(TestController.class)
+@WebFluxTest(ControllerExceptionsTest.class)
 public class GlobalExceptionHandlerTest {
 
     @Autowired
