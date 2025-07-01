@@ -1,0 +1,14 @@
+{
+  "BACKEND_CONTAINER_NAME":"backend-container",
+  "BACKEND_IMAGE_NAME":"pitanguinhamarvada/streaming-backend-java",
+  "BACKEND_IMAGE_TAG":"latest","BACKEND_PORT":"8080",
+  "BACKEND_CONTAINER_PORT":"8080",
+  "MONGO_URI":"your_mongo_uri_with_credentials",
+  "MONGO_DATABASE":"your_database_name",
+  "S3_REGION":"your_region",
+  "S3_BUCKET_NAME":"your_bucket_name",
+  "CLOUDFRONT_DISTRIBUTION_ID":"your_distribution_id",
+  "CLOUDFRONT_ENDPOINT":"your_endpoint",
+  "CLOUDFRONT_KEY_PAIR_ID":"your_key_pair_id",
+  "CLOUDFRONT_PRIVATE_KEY_NAME":"your_secret_private_key_name"
+}
