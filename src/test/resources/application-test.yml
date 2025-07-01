@@ -1,0 +1,13 @@
+spring:
+  application:
+    profiles:
+      active: test
+    temp-dir: /tmp/app/streaming/test/
+
+aws:
+  local:
+    credentials:
+      access-key: test-access-key
+      secret-key: test-secret-key
+  cloudfront:
+    private-key-name: test-private-key-name

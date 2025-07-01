@@ -1,0 +1,27 @@
+spring:
+  application:
+    profiles:
+      active: prod
+    name: streaming
+    temp-dir: /tmp/app/streaming/prod/
+    services:
+      music:
+        enabled: true
+      podcast:
+        enabled: true
+  data:
+    mongodb:
+      uri: ${MONGO_URI}
+      database: ${MONGO_DATABASE}
+aws:
+  s3:
+    enabled: true
+    region: ${S3_REGION}
+    endpoint: ${S3_ENDPOINT}
+    bucket-name: ${S3_BUCKET_NAME}
+  cloudfront:
+    enabled: true
+    distribution-id: ${CLOUDFRONT_DISTRIBUTION_ID}
+    endpoint: ${CLOUDFRONT_ENDPOINT}
+    key-pair-id: ${CLOUDFRONT_KEY_PAIR_ID}
+    private-key-name: ${CLOUDFRONT_PRIVATE_KEY_NAME}
