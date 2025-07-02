@@ -31,7 +31,7 @@ ssh-deploy:
 # Sloth mode: build, push, and deploy
 .PHONY: sloth
 sloth: build ssh-deploy
-	@echo "Yeah, I am a sloth!"
+	@echo "🦥 Yeah, I am a sloth!"
 
 # Show available commands
 .PHONY: help
