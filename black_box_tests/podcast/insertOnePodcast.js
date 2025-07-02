@@ -1,0 +1,17 @@
+db.podcast.insertOne({
+  _id: "pitanguinha",
+  title: "pitanguinha marvada",
+  published_at: ISODate('2003-04-16T23:46:31.819Z'),
+  year: 2003,
+  explicit: true,
+  duration: "42:42:42",
+  thumbnail_prefix: "thumbnail",
+  content_key: "pitanguinha/pitanguinha%20marvada.m4a",
+  conversion_status: "SUCCESS",
+  presenter: "pitanguinha marvada",
+  guests: ["pitanguinha", "marvada"],
+  description: "pitanguinha marvada stream",
+  categories: ["TECHNOLOGY"],
+  episode_number: 42,
+  season_number: 42,
+})
