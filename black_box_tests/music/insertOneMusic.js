@@ -1,4 +1,4 @@
-db.insertOne({
+db.music.insertOne({
   _id: "pitanguinha",
   title: "pitanguinha marvada",
   published_at: ISODate('2003-04-16T23:46:31.819Z'),
