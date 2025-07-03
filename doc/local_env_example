@@ -8,6 +8,6 @@ EC2_HOST=your_ec2_host
 ENVIRONMENT_VARIABLES_SECRET_NAME=your_environment_secret_name (dev/api/environment)
 SSH_KEY=your_path_ssh_key (~/.ssh/**.pem)
 
-# Docker variables, here is my image don't change
+# Docker variables, if you want to use my image, don't change these variables
 DOCKER_IMAGE=pitanguinhamarvada/streaming-backend-java 
 DOCKER_TAG=latest 
