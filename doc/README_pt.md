@@ -136,4 +136,4 @@ make ssh-deploy
 - [ ] **Desenvolvimento de Interface de Usuário**: Ganhar experiência no desenvolvimento de uma interface de usuário para a API.
 
 ## Licença
-Este projeto é licenciado sob a Licença GNU GPL v3.0. Veja o arquivo [LICENSE](../../LICENSE.txt) para mais detalhes. 
+Este projeto é licenciado sob a Licença GNU GPL v3.0. Veja o arquivo [LICENSE](../LICENSE.txt) para mais detalhes. 
