@@ -103,7 +103,6 @@ public class GlobalExceptionHandler {
 
         var details = ex.getDetails();
         var detailsMap = new LinkedHashMap<String, Object>(Map.of(
-                "message", details.message(),
                 "errorMessage", details.errorMessage()));
 
         return buildResponseError(
@@ -148,7 +147,7 @@ public class GlobalExceptionHandler {
 
         var details = ex.getDetails();
         var detailsMap = new LinkedHashMap<String, Object>(Map.of(
-                "errorMessage", details.errorMessage()));
+                "errorType", details.getClass().getSimpleName()));
 
         return buildResponseError(
                 "Search type arguments error",
