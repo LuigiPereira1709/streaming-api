@@ -103,7 +103,6 @@ public class GlobalExceptionHandler {
 
         var details = ex.getDetails();
         var detailsMap = new LinkedHashMap<String, Object>(Map.of(
-                "message", details.message(),
                 "errorMessage", details.errorMessage()));
 
         return buildResponseError(
@@ -148,13 +147,30 @@ public class GlobalExceptionHandler {
 
         var details = ex.getDetails();
         var detailsMap = new LinkedHashMap<String, Object>(Map.of(
-                "errorMessage", details.errorMessage()));
+                "errorType", details.getClass().getSimpleName()));
 
         return buildResponseError(
                 "Search type arguments error",
                 ex.getMessage(),
                 HttpStatus.BAD_REQUEST,
                 detailsMap);
+    }
+
+    /**
+     * Handles illegal argument exceptions that occur during request processing.
+     *
+     * @param ex The exception thrown due to an illegal argument.
+     * @return A ResponseEntity containing the error details and HTTP status.
+     */
+    @ExceptionHandler(IllegalArgumentException.class)
+    public Mono<ResponseEntity<ErrorResponse>> handleIllegalArgumentException(IllegalArgumentException ex) {
+        LOG.warn("[IllegalArgumentException] Error occured: {}", ex.getMessage(), ex);
+
+        return buildResponseError(
+                "Invalid argument provided",
+                ex.getMessage(),
+                HttpStatus.BAD_REQUEST,
+                Map.of("error", ex.getClass().getSimpleName()));
     }
 
     /**

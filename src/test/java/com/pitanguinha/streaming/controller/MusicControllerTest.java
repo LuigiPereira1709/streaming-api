@@ -308,6 +308,6 @@ public class MusicControllerTest {
                 .expectStatus().isBadRequest()
                 .expectBody()
                 .jsonPath("$.message").exists()
-                .jsonPath("$.details.errorMessage").exists();
+                .jsonPath("$.details").exists();
     }
 }

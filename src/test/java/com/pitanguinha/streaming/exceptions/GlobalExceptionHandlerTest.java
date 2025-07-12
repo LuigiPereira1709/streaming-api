@@ -41,7 +41,7 @@ public class GlobalExceptionHandlerTest {
     void testHandleDomainStateException() {
         webTestClient.get().uri("/test/domainStateException")
                 .exchange()
-                .expectStatus().is4xxClientError() // BAD_REQUEST no seu handler
+                .expectStatus().is4xxClientError()
                 .expectBody()
                 .jsonPath("$.message").isEqualTo("Domain state error occurred")
                 .jsonPath("$.details.stateName").exists();
@@ -52,10 +52,9 @@ public class GlobalExceptionHandlerTest {
     void testHandleNotFoundException() {
         webTestClient.get().uri("/test/notFoundException")
                 .exchange()
-                .expectStatus().is4xxClientError() // NOT_FOUND no seu handler
+                .expectStatus().is4xxClientError()
                 .expectBody()
                 .jsonPath("$.message").isEqualTo("Resource not found")
-                .jsonPath("$.details.message").exists()
                 .jsonPath("$.details.errorMessage").exists();
     }
 
@@ -64,7 +63,7 @@ public class GlobalExceptionHandlerTest {
     void testHandleInvalidSearchTypeException() {
         webTestClient.get().uri("/test/invalidSearchTypeException")
                 .exchange()
-                .expectStatus().is4xxClientError() // BAD_REQUEST no seu handler
+                .expectStatus().is4xxClientError()
                 .expectBody()
                 .jsonPath("$.message").isEqualTo("Invalid search type")
                 .jsonPath("$.details.message").exists()
@@ -77,10 +76,10 @@ public class GlobalExceptionHandlerTest {
     void testHandleSearchTypeArgumentsException() {
         webTestClient.get().uri("/test/searchTypeArgumentsException")
                 .exchange()
-                .expectStatus().is4xxClientError() // BAD_REQUEST no seu handler
+                .expectStatus().is4xxClientError()
                 .expectBody()
                 .jsonPath("$.message").isEqualTo("Search type arguments error")
-                .jsonPath("$.details.errorMessage").exists();
+                .jsonPath("$.details.errorType").exists();
     }
 
     @Test
@@ -102,7 +101,7 @@ public class GlobalExceptionHandlerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue("{}")
                 .exchange()
-                .expectStatus().is4xxClientError() // BAD_REQUEST no seu handler
+                .expectStatus().is4xxClientError()
                 .expectBody()
                 .jsonPath("$.message").isEqualTo("Validation error occurred")
                 .jsonPath("$.details.validationErrors").isMap();
@@ -114,7 +113,7 @@ public class GlobalExceptionHandlerTest {
         webTestClient.post().uri("/test/decodingException")
                 .contentType(MediaType.MULTIPART_FORM_DATA)
                 .exchange()
-                .expectStatus().is4xxClientError() // BAD_REQUEST no seu handler
+                .expectStatus().is4xxClientError()
                 .expectBody()
                 .jsonPath("$.message").isEqualTo("Decoding error occurred")
                 .jsonPath("$.details.error").exists()

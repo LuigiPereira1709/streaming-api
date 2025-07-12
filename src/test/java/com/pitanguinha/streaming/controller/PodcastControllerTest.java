@@ -278,6 +278,6 @@ public class PodcastControllerTest {
                 .expectStatus().isBadRequest()
                 .expectBody()
                 .jsonPath("$.message").exists()
-                .jsonPath("$.details.errorMessage").exists();
+                .jsonPath("$.details").exists();
     }
 }
