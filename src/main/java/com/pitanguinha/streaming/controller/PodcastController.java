@@ -9,7 +9,7 @@ import com.pitanguinha.streaming.dto.podcast.*;
 import com.pitanguinha.streaming.enums.media.SearchType;
 import com.pitanguinha.streaming.enums.media.podcast.Category;
 import com.pitanguinha.streaming.exceptions.search.SearchTypeArgumentsException;
-import com.pitanguinha.streaming.mapper.helper.MapperHelper;
+import com.pitanguinha.streaming.utils.MapperUtils;
 import com.pitanguinha.streaming.service.media.PodcastService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -84,7 +84,7 @@ public class PodcastController {
             @RequestBody @ValidEnum(enumClass = Category.class, message = "All categories must be valid") String... categories) {
         Category[] categoriesArray = new Category[categories.length];
         for (int i = 0; i < categories.length; i++)
-            categoriesArray[i] = (Category) MapperHelper.mapStringToEnum(Category.class, categories[i], "[\\s&-]|AND");
+            categoriesArray[i] = (Category) MapperUtils.mapStringToEnum(Category.class, categories[i], "[\\s&-]|AND");
 
         return service.findByAnyEnum(SearchType.CATEGORIES_IN, categoriesArray);
     }

@@ -11,9 +11,11 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.pitanguinha.streaming.utils.FileUtils;
 import com.pitanguinha.streaming.domain.media.Media;
 import com.pitanguinha.streaming.service.TempDirService;
 import com.pitanguinha.streaming.service.aws.AwsS3Service;
+
 import static com.pitanguinha.streaming.enums.aws.ContentType.JSON;
 import com.pitanguinha.streaming.enums.exceptions.*;
 import com.pitanguinha.streaming.exceptions.aws.s3.S3Exception;
@@ -288,7 +290,7 @@ class MediaS3UploadingHandler<E extends Media> {
      * 
      * @return an array of paths to the transferred files
      * 
-     * @see MediaUtils#transferTo(Path, String, FilePart) Transfers a file to a
+     * @see FileUtils#transferTo(Path, String, FilePart) Transfers a file to a
      *      specified directory.
      * @see TempDirService#getOrCreateDir(String) Gets or creates a
      *      temporary directory.
@@ -306,7 +308,7 @@ class MediaS3UploadingHandler<E extends Media> {
         List<Mono<Path>> transfers = new ArrayList<>();
 
         if (thumbnailFile != null) {
-            transfers.add(MediaUtils.transferTo(dirPath, "thumbnail", thumbnailFile)
+            transfers.add(FileUtils.transferTo(dirPath, "thumbnail", thumbnailFile)
                     .onErrorResume(e -> {
                         LOG.error("Error transferring thumbnail file to temporary directory: {}", e.getMessage());
                         return Mono.error(new InternalException(
@@ -316,7 +318,7 @@ class MediaS3UploadingHandler<E extends Media> {
         }
 
         if (contentFile != null) {
-            transfers.add(MediaUtils.transferTo(dirPath, "content", contentFile)
+            transfers.add(FileUtils.transferTo(dirPath, "content", contentFile)
                     .onErrorResume(e -> {
                         LOG.error("Error transferring content file to temporary directory: {}", e.getMessage());
                         return Mono.error(new InternalException(

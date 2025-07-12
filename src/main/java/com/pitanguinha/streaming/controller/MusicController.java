@@ -8,7 +8,7 @@ import com.pitanguinha.streaming.annotation.ValidEnum;
 import com.pitanguinha.streaming.dto.music.*;
 import com.pitanguinha.streaming.enums.media.SearchType;
 import com.pitanguinha.streaming.enums.media.music.*;
-import com.pitanguinha.streaming.mapper.helper.MapperHelper;
+import com.pitanguinha.streaming.utils.MapperUtils;
 import com.pitanguinha.streaming.service.media.MusicService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -91,7 +91,7 @@ public class MusicController {
             @RequestBody @ValidEnum(enumClass = Mood.class, message = "All moods must be valid") String... moodsString) {
         Mood[] moodsEnum = new Mood[moodsString.length];
         for (int i = 0; i < moodsString.length; i++)
-            moodsEnum[i] = (Mood) MapperHelper.mapStringToEnum(Mood.class, moodsString[i], "[\\s&-]|AND");
+            moodsEnum[i] = (Mood) MapperUtils.mapStringToEnum(Mood.class, moodsString[i], "[\\s&-]|AND");
 
         return service.findByAnyEnum(SearchType.MOODS_IN, moodsEnum);
     }
@@ -140,7 +140,7 @@ public class MusicController {
             return service.findByAnyString(SearchType.FEAT_CONTAINS, feat);
 
         if (genre != null && !genre.isBlank()) {
-            Genre genreEnum = (Genre) MapperHelper.mapStringToEnum(Genre.class, genre, "[\\s&-]|AND");
+            Genre genreEnum = (Genre) MapperUtils.mapStringToEnum(Genre.class, genre, "[\\s&-]|AND");
             return service.findByAnyEnum(SearchType.GENRE, genreEnum);
         }
 

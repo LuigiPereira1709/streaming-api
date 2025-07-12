@@ -1,13 +1,13 @@
-package com.pitanguinha.streaming.mapper.helper;
+package com.pitanguinha.streaming.utils;
 
 import java.util.Arrays;
 
 /**
- * Helper class for mapping to values.
+ * Utility class for mapping to values.
  *
  * @since 1.0
  */
-public class MapperHelper {
+public class MapperUtils {
     /**
      * Maps a string value to an enum constant of the specified enum class.
      *
@@ -20,8 +20,8 @@ public class MapperHelper {
     public static Enum<?> mapStringToEnum(Class<? extends Enum<?>> enumClass, String value, String regex) {
         return Arrays.stream(enumClass.getEnumConstants())
                 .filter(e -> {
-                    String normalizedEnum = StringHelper.normalize(e.name(), regex, "");
-                    String normalizedValue = StringHelper.normalize(value, regex, "");
+                    String normalizedEnum = StringUtils.normalize(e.name(), regex, "");
+                    String normalizedValue = StringUtils.normalize(value, regex, "");
                     return normalizedEnum.equalsIgnoreCase(normalizedValue);
                 })
                 .findFirst()

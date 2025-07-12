@@ -3,7 +3,7 @@ package com.pitanguinha.streaming.annotation;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import com.pitanguinha.streaming.mapper.helper.StringHelper;
+import com.pitanguinha.streaming.utils.StringUtils;
 
 import java.lang.annotation.*;
 
@@ -46,7 +46,7 @@ public @interface ValidEnum {
  * @since 1.0
  */
 class EnumValidator implements ConstraintValidator<ValidEnum, Object> {
-    private static final String REGEX = "[_\\s\\-&]|AND";
+    private static final String REGEX = "[-_\\s&]|AND";
     private static final String REPLACEMENT = "";
 
     private boolean ignoreCase;
@@ -58,7 +58,7 @@ class EnumValidator implements ConstraintValidator<ValidEnum, Object> {
         Class<? extends Enum<?>> enumClass = constraintAnnotation.enumClass();
         this.enumConstants = Arrays.stream(enumClass.getEnumConstants())
                 .map(Enum::name)
-                .map(name -> StringHelper.normalize(name, REGEX, REPLACEMENT))
+                .map(name -> StringUtils.normalize(name, REGEX, REPLACEMENT))
                 .map(name -> ignoreCase ? name.toLowerCase() : name)
                 .collect(Collectors.toSet());
     }
@@ -87,7 +87,7 @@ class EnumValidator implements ConstraintValidator<ValidEnum, Object> {
      * @since 1.0
      */
     private boolean isValidValue(String value) {
-        String normalizedValue = StringHelper.normalize(value.toString(), REGEX, REPLACEMENT);
+        String normalizedValue = StringUtils.normalize(value.toString(), REGEX, REPLACEMENT);
         normalizedValue = ignoreCase ? normalizedValue.toLowerCase() : normalizedValue;
         return enumConstants.contains(normalizedValue);
     }
@@ -108,7 +108,7 @@ class EnumValidator implements ConstraintValidator<ValidEnum, Object> {
 
         return values.stream()
                 .filter(Objects::nonNull)
-                .map(valueName -> StringHelper.normalize(valueName, REGEX, REPLACEMENT))
+                .map(valueName -> StringUtils.normalize(valueName, REGEX, REPLACEMENT))
                 .allMatch(value -> isValidValue(value));
     }
 

@@ -1,11 +1,11 @@
-package com.pitanguinha.streaming.mapper.helper;
+package com.pitanguinha.streaming.utils;
 
 /**
- * Helper class for string operations.
+ * Utility class for string operations.
  * 
  * @since 1.0
  */
-public class StringHelper {
+public class StringUtils {
     /**
      * Normalizes a string by replacing all occurrences of the specified regex with
      * the given replacement.

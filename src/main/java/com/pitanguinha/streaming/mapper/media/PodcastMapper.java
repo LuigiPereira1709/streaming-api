@@ -10,7 +10,7 @@ import com.pitanguinha.streaming.dto.podcast.*;
 import com.pitanguinha.streaming.domain.media.Podcast;
 import com.pitanguinha.streaming.enums.media.podcast.Category;
 
-import static com.pitanguinha.streaming.mapper.helper.MapperHelper.*;
+import static com.pitanguinha.streaming.utils.MapperUtils.*;
 
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = IGNORE, nullValueCheckStrategy = ALWAYS, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface PodcastMapper {

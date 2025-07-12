@@ -9,8 +9,8 @@ import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;
 import com.pitanguinha.streaming.dto.music.*;
 import com.pitanguinha.streaming.enums.media.music.*;
 import com.pitanguinha.streaming.domain.media.Music;
-import static com.pitanguinha.streaming.mapper.helper.MapperHelper.*;
-import static com.pitanguinha.streaming.mapper.helper.StringHelper.*;
+import static com.pitanguinha.streaming.utils.MapperUtils.*;
+import static com.pitanguinha.streaming.utils.StringUtils.*;
 
 /**
  * Mapper for {@link Music} entity and its DTOs.
@@ -43,7 +43,7 @@ public interface MusicMapper {
             return genreFallback;
         }
 
-        return (Genre) mapStringToEnum(Genre.class, genreStr, "[\\s&-]|AND");
+        return (Genre) mapStringToEnum(Genre.class, genreStr, "[-_\\s&]|AND");
     }
 
     default List<String> mapMoodsToString(Music entity) {

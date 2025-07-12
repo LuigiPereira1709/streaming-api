@@ -22,6 +22,7 @@ import com.pitanguinha.streaming.exceptions.aws.s3.S3Exception;
 import com.pitanguinha.streaming.service.TempDirService;
 import com.pitanguinha.streaming.service.aws.AwsS3Service;
 import com.pitanguinha.streaming.util.test.creator.media.music.MusicEntityCreator;
+import com.pitanguinha.streaming.utils.FileUtils;
 
 import reactor.test.StepVerifier;
 import reactor.core.publisher.Mono;
@@ -72,14 +73,14 @@ public class MediaS3UploadingHandlerTest {
     // @DisplayName("When uploading a large media file, it should make the all
     // upload in background")
     // void uploadOrUpdateMedia_Large_ReturnsMonoEntity() throws Exception {
-    // try (var mockedMediaUtils = mockStatic(MediaUtils.class)) {
+    // try (var mockedFileUtils = mockStatic(FileUtils.class)) {
     // Path mockedPath = mock(Path.class);
 
-    // // MediaUtils mocks
-    // mockedMediaUtils.when(() -> MediaUtils.transferTo(any(Path.class),
+    // // FileUtils mocks
+    // mockedFileUtils.when(() -> FileUtils.transferTo(any(Path.class),
     // anyString(), any(FilePart.class)))
     // .thenReturn(Mono.just(mockedPath));
-    // mockedMediaUtils.when(() -> MediaUtils.getDuration(any(Path.class)))
+    // mockedFileUtils.when(() -> FileUtils.getDuration(any(Path.class)))
     // .thenReturn("test");
 
     // // Path and File behavior mocks
@@ -142,9 +143,9 @@ public class MediaS3UploadingHandlerTest {
     @Test
     @DisplayName("When uploading a normal media file, it should upload synchronously")
     void uploadOrUpdateMedia_Normal_ReturnsMonoEntity() {
-        try (var mockedMediaUtils = mockStatic(MediaUtils.class)) {
-            // MediaUtils mocks
-            mockedMediaUtils.when(() -> MediaUtils.transferTo(any(Path.class), anyString(), any(FilePart.class)))
+        try (var mockedFileUtils = mockStatic(FileUtils.class)) {
+            // FileUtils mocks
+            mockedFileUtils.when(() -> FileUtils.transferTo(any(Path.class), anyString(), any(FilePart.class)))
                     .thenReturn(Mono.just(mockedPath));
 
             handler.uploadOrUpdateMedia(entity, mock(FilePart.class), mock(FilePart.class))
@@ -161,9 +162,9 @@ public class MediaS3UploadingHandlerTest {
     @Test
     @DisplayName("When has an error uploading a normal media file, it should return an error")
     void uploadOrUpdateMedia_Normal_ReturnsMonoError() {
-        try (var mockedMediaUtils = mockStatic(MediaUtils.class)) {
-            // MediaUtils mocks
-            mockedMediaUtils.when(() -> MediaUtils.transferTo(any(Path.class), anyString(), any(FilePart.class)))
+        try (var mockedFileUtils = mockStatic(FileUtils.class)) {
+            // FileUtils mocks
+            mockedFileUtils.when(() -> FileUtils.transferTo(any(Path.class), anyString(), any(FilePart.class)))
                     .thenReturn(Mono.just(mockedPath));
 
             // S3 mocks

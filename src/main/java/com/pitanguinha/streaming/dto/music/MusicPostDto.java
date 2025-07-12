@@ -38,7 +38,7 @@ public class MusicPostDto extends MediaPostDto {
     @Schema(description = "The list of featured artists.", example = "[\"Pitanguinha\", \"Marvada\"]")
     private List<String> feats;
 
-    @Nullable
+    @NotNull(message = "The album name cannot be null")
     @Schema(description = "The album name.", example = "Best of Pitanguinha")
     private String album;
 
