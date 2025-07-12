@@ -26,6 +26,7 @@ import com.pitanguinha.streaming.service.TempDirService;
 import com.pitanguinha.streaming.service.media.operation.MediaOperator;
 
 import com.pitanguinha.streaming.util.test.*;
+import com.pitanguinha.streaming.utils.FileUtils;
 
 import reactor.core.publisher.*;
 import reactor.test.StepVerifier;
@@ -73,77 +74,95 @@ public class AbstractMediaServiceTest {
     @Test
     @DisplayName("Should to save media in S3 and in repository, returning a SuccessDto")
     void saveInS3AndRepository_ReturnsMediaSuccessDto() {
-        var media = new Media();
-        media.setId("testId");
+        try (var mockedFileUtils = mockStatic(FileUtils.class)) {
+            var media = new Media();
+            media.setId("testId");
 
-        // Mocks the mediaOperator's uploadOrUpdateToS3 method to return a Mono of Media
-        when(mediaOperator.uploadOrUpdateToS3(any(Media.class), any(FilePart.class), any(FilePart.class)))
-                .thenReturn(Mono.just(media));
+            // Mocks the isFileSizeSupported method
+            mockedFileUtils.when(() -> FileUtils.isFileSizeSupported(any(FilePart.class), anyInt()))
+                    .thenReturn(Mono.empty());
 
-        // Mock the repository's save method to return the Media object
-        when(repository.save(any(Media.class))).thenReturn(Mono.just(media));
+            // Mocks the mediaOperator's uploadOrUpdateToS3 method to return a Mono of Media
+            when(mediaOperator.uploadOrUpdateToS3(any(Media.class), any(FilePart.class), any(FilePart.class)))
+                    .thenReturn(Mono.just(media));
 
-        mediaService.saveInS3AndRepository(media, mock(FilePart.class), mock(FilePart.class))
-                .as(StepVerifier::create)
-                .expectNextMatches(dto -> dto != null && dto.getThumbnailUrl().equals("testSignedUrl"))
-                .verifyComplete();
+            // Mock the repository's save method to return the Media object
+            when(repository.save(any(Media.class))).thenReturn(Mono.just(media));
 
-        // Verify that the methods were called the expected number of times
-        verify(repository, times(1)).save(eq(media));
-        verify(mediaOperator, times(1)).uploadOrUpdateToS3(eq(media), any(FilePart.class), any(FilePart.class));
-        verify(cloudFrontService, times(1)).getSignedUrl(eq(media.getId() + "/" + media.getThumbnailSuffix()));
+            mediaService.saveInS3AndRepository(media, mock(FilePart.class), mock(FilePart.class))
+                    .as(StepVerifier::create)
+                    .expectNextMatches(dto -> dto != null && dto.getThumbnailUrl().equals("testSignedUrl"))
+                    .verifyComplete();
+
+            // Verify that the methods were called the expected number of times
+            verify(repository, times(1)).save(eq(media));
+            verify(mediaOperator, times(1)).uploadOrUpdateToS3(eq(media), any(FilePart.class), any(FilePart.class));
+            verify(cloudFrontService, times(1)).getSignedUrl(eq(media.getId() + "/" + media.getThumbnailSuffix()));
+        }
     }
 
     @Test
     @DisplayName("When has an error during upload to S3, should throw an S3Exception")
     void saveInS3AndRepository_ThrowsS3Exception() {
-        when(repository.save(any(Media.class)))
-                .thenReturn(Mono.just(new Media()));
-        when(mediaOperator.uploadOrUpdateToS3(any(Media.class), any(FilePart.class), any(FilePart.class)))
-                .thenReturn(Mono.error(new S3Exception("Error", null, null, null)));
+        try (var mockedFileUtils = mockStatic(FileUtils.class)) {
+            mockedFileUtils.when(() -> FileUtils.isFileSizeSupported(any(FilePart.class), anyInt()))
+                    .thenReturn(Mono.empty());
 
-        // When: call the saveInS3AndRepository method
-        mediaService.saveInS3AndRepository(mock(Media.class), mock(FilePart.class), mock(FilePart.class))
-                // Then: it should throw an S3Exception
-                .as(StepVerifier::create)
-                .expectError(S3Exception.class)
-                .verify();
+            when(repository.save(any(Media.class)))
+                    .thenReturn(Mono.just(new Media()));
+
+            when(mediaOperator.uploadOrUpdateToS3(any(Media.class), any(FilePart.class), any(FilePart.class)))
+                    .thenReturn(Mono.error(new S3Exception("Error", null, null, null)));
+
+            // When: call the saveInS3AndRepository method
+            mediaService.saveInS3AndRepository(mock(Media.class), mock(FilePart.class), mock(FilePart.class))
+                    // Then: it should throw an S3Exception
+                    .as(StepVerifier::create)
+                    .expectError(S3Exception.class)
+                    .verify();
+        }
     }
 
     @Test
     @DisplayName("Should update media in S3 and in repository, returning a SuccessDto")
     void updateInS3AndRepository_ReturnsMediaSuccessDto() {
-        var media = new Media();
-        media.setId("testId");
-        media.setConversionStatus(ConversionStatus.SUCCESS);
+        try (var mockedFileUtils = mockStatic(FileUtils.class)) {
+            var media = new Media();
+            media.setId("testId");
+            media.setConversionStatus(ConversionStatus.SUCCESS);
 
-        // Mocks the mediaOperator's uploadOrUpdateToS3 method to return a Mono of Media
-        when(mediaOperator.uploadOrUpdateToS3(any(Media.class), any(FilePart.class), any(FilePart.class)))
-                .thenReturn(Mono.just(media));
+            // Mocks the isFileSizeSupported method
+            mockedFileUtils.when(() -> FileUtils.isFileSizeSupported(any(FilePart.class), anyInt()))
+                    .thenReturn(Mono.empty());
 
-        // Mock the repository's save method to return the Media object
-        when(repository.save(any(Media.class))).thenReturn(Mono.just(media));
-        when(repository.findById(anyString())).thenReturn(Mono.just(media));
+            // Mocks the mediaOperator's uploadOrUpdateToS3 method to return a Mono of Media
+            when(mediaOperator.uploadOrUpdateToS3(any(Media.class), any(FilePart.class), any(FilePart.class)))
+                    .thenReturn(Mono.just(media));
 
-        // Givem: create a MediaPutDto
-        var putDto = new MediaPutDto();
-        putDto.setId(media.getId());
-        putDto.setContentFile(new FilePartMock());
-        putDto.setThumbnailFile(new FilePartMock());
+            // Mock the repository's save method to return the Media object
+            when(repository.save(any(Media.class))).thenReturn(Mono.just(media));
+            when(repository.findById(anyString())).thenReturn(Mono.just(media));
 
-        // When: call the updateInS3AndRepository method
-        mediaService.updateInS3AndRepository(putDto, (entity, dto) -> {
-        })
-                // Then: it should return a Mono containing a MediaSuccessDto
-                .as(StepVerifier::create)
-                .expectNextMatches(dto -> dto != null && dto.getThumbnailUrl().equals("testSignedUrl"))
-                .verifyComplete();
+            // Givem: create a MediaPutDto
+            var putDto = new MediaPutDto();
+            putDto.setId(media.getId());
+            putDto.setContentFile(new FilePartMock());
+            putDto.setThumbnailFile(new FilePartMock());
 
-        // Verify that the methods were called the expected number of times
-        verify(repository, times(1)).save(eq(media));
-        verify(repository, times(1)).findById(eq(media.getId()));
-        verify(mediaOperator, times(1)).uploadOrUpdateToS3(eq(media), any(FilePart.class), any(FilePart.class));
-        verify(cloudFrontService, times(1)).getSignedUrl(eq(media.getId() + "/" + media.getThumbnailSuffix()));
+            // When: call the updateInS3AndRepository method
+            mediaService.updateInS3AndRepository(putDto, (entity, dto) -> {
+            })
+                    // Then: it should return a Mono containing a MediaSuccessDto
+                    .as(StepVerifier::create)
+                    .expectNextMatches(dto -> dto != null && dto.getThumbnailUrl().equals("testSignedUrl"))
+                    .verifyComplete();
+
+            // Verify that the methods were called the expected number of times
+            verify(repository, times(1)).save(eq(media));
+            verify(repository, times(1)).findById(eq(media.getId()));
+            verify(mediaOperator, times(1)).uploadOrUpdateToS3(eq(media), any(FilePart.class), any(FilePart.class));
+            verify(cloudFrontService, times(1)).getSignedUrl(eq(media.getId() + "/" + media.getThumbnailSuffix()));
+        }
     }
 
     @Test

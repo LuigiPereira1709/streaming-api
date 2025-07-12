@@ -34,7 +34,6 @@ import jakarta.annotation.PostConstruct;
 @Component
 @ConditionalOnProperty(name = "aws.s3.enabled", havingValue = "true")
 class MediaS3UploadingHandler<E extends Media> {
-    private static final long ASYNC_FILE_SIZE_LIMIT = 100 * 1024 * 1024; // 100MB
     private final static Logger LOG = LoggerFactory.getLogger(MediaS3UploadingHandler.class);
 
     private final AwsS3Service s3Service;
@@ -190,16 +189,8 @@ class MediaS3UploadingHandler<E extends Media> {
      */
 
     public Mono<E> uploadOrUpdateMedia(E entity, FilePart thumbnailFile, FilePart contentFile) {
-        String id = entity.getId();
         return getFilePaths(entity, thumbnailFile, contentFile)
                 .flatMap(filesPaths -> {
-                    if (contentFile != null && isLargeFile(filesPaths)) {
-                        throw new S3Exception(
-                                "Content file is too large for upload at moment, please try a smaller file\n"
-                                        + "Size supported: " + ASYNC_FILE_SIZE_LIMIT / (1024 * 1024) + "MB",
-                                id, S3OperationException.UPLOAD_FAILED, SeverityLevel.LOW);
-                    }
-
                     return (thumbnailFile != null || contentFile != null
                             ? uploadNormal(entity, filesPaths)
                             : uploadJsonMetadata(entity))
@@ -360,19 +351,5 @@ class MediaS3UploadingHandler<E extends Media> {
         }
 
         return json;
-    }
-
-    /**
-     * Checks if the provided files are large files.
-     *
-     * @param filesPaths the paths to the files
-     * 
-     * @return true if the content file is larger than the limit, false otherwise
-     * 
-     * @since 1.0
-     */
-    private boolean isLargeFile(Path[] filesPaths) {
-        Path contentFile = filesPaths.length == 2 ? filesPaths[1] : filesPaths[0];
-        return contentFile.toFile().length() >= ASYNC_FILE_SIZE_LIMIT;
     }
 }

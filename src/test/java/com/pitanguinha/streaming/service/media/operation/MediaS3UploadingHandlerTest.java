@@ -119,28 +119,6 @@ public class MediaS3UploadingHandlerTest {
     // }
 
     @Test
-    @DisplayName("When uploading a too large media file, thrown an error")
-    void uploadOrUpdateMedia_Large_ReturnsMonoError() {
-        try (var mockedMediaUtils = mockStatic(MediaUtils.class)) {
-            Path mockedPath = mock(Path.class);
-
-            // MediaUtils mocks
-            mockedMediaUtils.when(() -> MediaUtils.transferTo(any(Path.class), anyString(), any(FilePart.class)))
-                    .thenReturn(Mono.just(mockedPath));
-
-            // File and Path behavior mocks
-            File mockedFile = mock(File.class);
-            when(mockedPath.toFile()).thenReturn(mockedFile);
-            when(mockedFile.length()).thenReturn((long) 100 * 1024 * 1024); // Simulating a large file
-
-            handler.uploadOrUpdateMedia(entity, mock(FilePart.class), mock(FilePart.class))
-                    .as(StepVerifier::create)
-                    .expectError(S3Exception.class)
-                    .verify();
-        }
-    }
-
-    @Test
     @DisplayName("When uploading a normal media file, it should upload synchronously")
     void uploadOrUpdateMedia_Normal_ReturnsMonoEntity() {
         try (var mockedFileUtils = mockStatic(FileUtils.class)) {

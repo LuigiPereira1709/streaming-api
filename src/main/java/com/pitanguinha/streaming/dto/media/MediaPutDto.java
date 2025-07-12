@@ -2,8 +2,8 @@ package com.pitanguinha.streaming.dto.media;
 
 import org.springframework.http.codec.multipart.FilePart;
 
+import com.pitanguinha.streaming.annotation.*;
 import com.pitanguinha.streaming.enums.media.contenttypes.*;
-import com.pitanguinha.streaming.annotation.SupportedContentType;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 

@@ -14,6 +14,7 @@ import com.pitanguinha.streaming.enums.media.ConversionStatus;
 import com.pitanguinha.streaming.service.*;
 import com.pitanguinha.streaming.service.aws.*;
 import com.pitanguinha.streaming.service.media.operation.MediaOperator;
+import com.pitanguinha.streaming.utils.FileUtils;
 
 import reactor.core.publisher.*;
 
@@ -101,7 +102,9 @@ public abstract class AbstractMediaService<E extends Media, D extends MediaSucce
      * @since 1.0
      */
     protected Mono<D> saveInS3AndRepository(E entity, FilePart thumbnailFile, FilePart contentFile) {
-        return saveInRepository(entity)
+        return FileUtils.isFileSizeSupported(contentFile, 9) 
+		.then(FileUtils.isFileSizeSupported(thumbnailFile, 1))
+		.then(saveInRepository(entity))
                 .flatMap(savedEntity -> mediaOperator.uploadOrUpdateToS3(savedEntity, thumbnailFile, contentFile))
                 .flatMap(this::toDtoInternal);
     }

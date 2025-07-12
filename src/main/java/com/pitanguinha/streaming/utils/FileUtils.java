@@ -2,6 +2,7 @@ package com.pitanguinha.streaming.utils;
 
 import java.nio.file.*;
 
+import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.http.codec.multipart.FilePart;
 
 import com.pitanguinha.streaming.enums.exceptions.SeverityLevel;
@@ -43,5 +44,44 @@ public class FileUtils {
                                 + fileName,
                         FileUtils.class, SeverityLevel.HIGH, e))
                 .thenReturn(tempFile);
+    }
+
+    /**
+     * Checks if the file size is supported.
+     * 
+     * <p>
+     * This method checks if the size of the provided FilePart is within the
+     * specified maximum file size limit. If the file size exceeds the limit or is
+     * less than or equal to zero, an IllegalArgumentException is thrown.
+     * </p>
+     * 
+     * @param file        the FilePart to check
+     * @param maxFileSize the maximum allowed file size in MB
+     * 
+     * @throws IllegalArgumentException if the file size is not supported.
+     */
+    public static Mono<Void> isFileSizeSupported(FilePart file, int maxFileSize) {
+        if (maxFileSize <= 0)
+            throw new IllegalArgumentException("Max file size must be greater than 0");
+
+        if (file == null)
+            return Mono.empty();
+
+        return file.content()
+                .map(dataBfr -> {
+                    int readableBytes = dataBfr.readableByteCount();
+                    DataBufferUtils.release(dataBfr);
+                    return (long) readableBytes;
+                })
+                .reduce(Long::sum)
+                .flatMap(fileSize -> {
+                    long maxFileSizeInBytes = maxFileSize * 1024 * 1024 * 1024;
+                    if (fileSize >= maxFileSizeInBytes || fileSize <= 0) {
+                        return Mono.error(new IllegalArgumentException(
+                                "File size is not supported. File size: " + fileSize + " bytes, Max file size: "
+                                        + maxFileSizeInBytes + " bytes"));
+                    }
+                    return Mono.empty();
+                });
     }
 }
