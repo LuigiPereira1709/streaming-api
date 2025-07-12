@@ -37,10 +37,12 @@ public class MediaPostDto {
     @NotNull(message = "Thumb file don't be null")
     @Schema(description = "The thumbnail file associated with the media.", example = "thumbnail.jpg")
     @SupportedContentType(enumClass = ThumbnailSupportedTypes.class, message = "Invalid thumbnail content type. Supported types: png, jpeg, webp.")
+    @SupportedFileSize(message = "Thumbnail file size must be greater than 0 and less than or equal to 1 MB.")
     private FilePart thumbnailFile;
 
     @NotNull(message = "Content file don't be null")
     @Schema(description = "The content file associated with the media.", example = "content.mp3")
     @SupportedContentType(enumClass = AudioSupportedTypes.class, message = "Invalid content file content type. Supported types: opus, ogg, flac, mp3, wav, wav_x, aac.")
+    @SupportedFileSize(message = "Content file size must be greater than 0 and less than or equal to 100 MB.", maxFileSize = 100)
     private FilePart contentFile;
 }

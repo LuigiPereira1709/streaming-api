@@ -2,8 +2,8 @@ package com.pitanguinha.streaming.dto.media;
 
 import org.springframework.http.codec.multipart.FilePart;
 
+import com.pitanguinha.streaming.annotation.*;
 import com.pitanguinha.streaming.enums.media.contenttypes.*;
-import com.pitanguinha.streaming.annotation.SupportedContentType;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -39,10 +39,12 @@ public class MediaPutDto {
     @Nullable
     @Schema(description = "The thumbnail file associated with the media.", example = "thumbnail.jpg")
     @SupportedContentType(enumClass = ThumbnailSupportedTypes.class, message = "Invalid thumbnail content type. Supported types: png, jpeg, webp.")
+    @SupportedFileSize(message = "Thumbnail file size must be greater than 0 and less than or equal to 1 MB.")
     private FilePart thumbnailFile;
 
     @Nullable
     @Schema(description = "The content file associated with the media.", example = "content.mp3")
     @SupportedContentType(enumClass = AudioSupportedTypes.class, message = "Invalid content file content type. Supported types: opus, ogg, flac, mp3, wav, wav_x, aac.")
+    @SupportedFileSize(message = "Content file size must be greater than 0 and less than or equal to 100 MB.", maxFileSize = 100)
     private FilePart contentFile;
 }
