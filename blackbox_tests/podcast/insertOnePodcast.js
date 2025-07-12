@@ -1,10 +1,10 @@
 db.podcast.insertOne({
   _id: "pitanguinha",
   title: "pitanguinha marvada",
-  published_at: ISODate('2003-04-16T23:46:31.819Z'),
+  published_at: ISODate("2003-04-16T23:46:31.819Z"),
   year: 2003,
   explicit: true,
-  duration: "42:42:42",
+  duration: "00:00:00",
   thumbnail_prefix: "thumbnail",
   content_key: "pitanguinha/pitanguinha%20marvada.m4a",
   conversion_status: "SUCCESS",
@@ -14,4 +14,4 @@ db.podcast.insertOne({
   categories: ["TECHNOLOGY"],
   episode_number: 42,
   season_number: 42,
-})
+});
