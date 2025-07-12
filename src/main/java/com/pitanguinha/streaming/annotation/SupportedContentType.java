@@ -51,8 +51,8 @@ class SupportedContentTypeValidator implements ConstraintValidator<SupportedCont
 
     @Override
     public boolean isValid(FilePart filePart, ConstraintValidatorContext context) {
-        if (filePart == null || filePart.filename() == null)
-            return true; // Null or empty file part is valid
+        if (filePart == null)
+            return true; // Null file part is valid
 
         String contentType = filePart.headers().getContentType() != null
                 ? filePart.headers().getContentType().toString()
